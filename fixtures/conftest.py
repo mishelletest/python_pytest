@@ -1,15 +1,11 @@
 import pytest
 from selenium import webdriver
 
-
-@pytest.fixture
-def setup():
-    """Fixture to initialize the browser and handle setup/teardown."""
-    driver = webdriver.Chrome()  # You can replace with Firefox or another browser
+@pytest.fixture(scope="class")
+def setup(request):
+    driver = webdriver.Chrome()   # You can parameterize this to use different browsers
     driver.maximize_window()
-
-    # Yield the driver so it's available to the test
-    yield driver
-
-    # Quit the driver after the test completes
+    driver.get("https://google.com")
+    request.cls.driver = driver
+    yield
     driver.quit()
