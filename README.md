@@ -1,5 +1,5 @@
-# python_pytest run the following command in console \n
-pip3 install pytest
+# python_pytest run the following command in console
+pip3 install pytest \n
 pip3 install pytest-html 
 pytest --fixtures 
 pip install webdriver-manager
