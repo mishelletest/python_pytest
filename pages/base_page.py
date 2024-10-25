@@ -70,3 +70,9 @@ class BasePage:
     def get_url(self):
         """Return the current URL."""
         return self.driver.current_url
+
+    def handle_alert(self) -> str:
+        alert = self.driver.switch_to.alert
+        alert_text = alert.text
+        alert.accept()
+        return alert_text

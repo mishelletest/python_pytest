@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .login-container input, .login-container select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        .left, .right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: grab;
+        }
+        .droppable {
+            border: 2px dashed #999;
+            padding: 10px;
+            min-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #uploadSection {
+            display: none; /* Hidden by default, shown only for Admin */
+        }
+        .highlight {
+            border-color: red;
+        }
+        .link {
+            float: right;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="user_form.html" class="link">Click me to open in a new tab</a>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <span id="usernameError" class="error"></span>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <span id="passwordError" class="error"></span>
+
+            <label for="role">Select your role:</label>
+            <select id="role" name="role" required onchange="checkRole()">
+                <option value="">-- Select your role --</option>
+                <option value="Admin">Admin</option>
+                <option value="Editor">Editor</option>
+                <option value="Viewer">Viewer</option>
+                <option value="Approver">Approver</option>
+            </select>
+            <span id="roleError" class="error"></span>
+
+            <button type="button" onclick="validateLogin()">Login</button>
+            <span id="loginError" class="error"></span>
+        </form>
+    </div>
+
+    <!-- Admin-specific section to upload a header image -->
+    <div id="uploadSection">
+        <h3>Upload Header Image</h3>
+        <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
+        <div id="headerImage"></div>
+    </div>
+
+    <h1>Drag and Drop Images</h1>
+    <p>Drag and drop the images to rearrange them.</p>
+
+    <div class="image-container">
+        <div class="left droppable" id="leftContainer">
+            <img id="playwrightImg" src="playwright.png" alt="Playwright Image" draggable="true">
+            <img id="pythonImg" src="python.png" alt="Python Image" draggable="true">
+        </div>
+
+        <div class="right droppable" id="rightContainer">
+            <img id="seleniumImg" src="selenium.png" alt="Selenium Image" draggable="true">
+            <img id="testImg" src="test.png" alt="Test Image" draggable="true">
+        </div>
+    </div>
+
+    <script>
+        // Check role and display the upload section if Admin
+        function checkRole() {
+            const role = document.getElementById("role").value;
+            const uploadSection = document.getElementById("uploadSection");
+            if (role === 'Admin') {
+                uploadSection.style.display = "block";
+            } else {
+                uploadSection.style.display = "none";
+            }
+        }
+
+        // Validate login form
+        function validateLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const role = document.getElementById("role").value;
+            let isValid = true;
+
+            // Reset error messages
+            document.getElementById("usernameError").textContent = "";
+            document.getElementById("passwordError").textContent = "";
+            document.getElementById("roleError").textContent = "";
+            document.getElementById("loginError").textContent = "";
+
+            // Validate username
+            if (!username) {
+                document.getElementById("usernameError").textContent = "Username is required.";
+                isValid = false;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById("passwordError").textContent = "Password is required.";
+                isValid = false;
+            }
+
+            // Validate role
+            if (!role) {
+                document.getElementById("roleError").textContent = "Role is required.";
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert("Login successful.");
+            } else {
+                document.getElementById("loginError").textContent = "Please fill out all required fields.";
+            }
+        }
+
+        // Drag and drop functionality
+        const draggables = document.querySelectorAll("img[draggable='true']");
+        const containers = document.querySelectorAll(".droppable");
+
+        draggables.forEach(img => {
+            img.addEventListener("dragstart", () => {
+                img.classList.add("dragging");
+            });
+            img.addEventListener("dragend", () => {
+                img.classList.remove("dragging");
+            });
+        });
+
+        containers.forEach(container => {
+            container.addEventListener("dragover", e => {
+                e.preventDefault();
+                const dragging = document.querySelector(".dragging");
+                container.appendChild(dragging);
+            });
+        });
+
+        function previewImage(event) {
+            const headerImage = document.getElementById("headerImage");
+            headerImage.innerHTML = ""; // Clear previous image
+            const file = event.target.files[0];
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.style.height = "3rem"; // Set height to 3 inches (approximately)
+            img.style.width = "100%"; // Full width
+            headerImage.appendChild(img);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+Login
+Username:
+
+Password:
+
+Select your role:
+                -- Select your role --
+                Admin
+                Editor
+                Viewer
+                Approver
+            
+Login
+Drag and Drop Images
+Drag and drop the images to rearrange them.
+
+
+
+

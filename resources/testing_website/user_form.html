@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        input {
+            display: block;
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 50%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>User Form</h2>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" required>
+        <span id="firstNameError" class="error"></span>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" required>
+        <span id="lastNameError" class="error"></span>
+
+
+
+        <label for="birthday">Birthday:</label>
+        <input type="date" id="birthday" required>
+        <span id="birthdayError" class="error"></span>
+
+<label for="gender">Gender:</label>
+<div style="display: flex; align-items: center;">
+    <label>
+        <input type="radio" name="gender" value="Male" required> Male
+    </label>
+    <label style="margin-left: 10px;">
+        <input type="radio" name="gender" value="Female" required> Female
+    </label>
+</div>
+
+
+
+        <span id="genderError" class="error"></span>
+
+	<div style="display: flex; justify-content: center;">
+        <button type="button" onclick="submitForm()">Submit</button>
+	</div>
+        <div id="formMessage" class="error"></div>
+    </div>
+
+    <script>
+        function submitForm() {
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const birthday = document.getElementById("birthday").value;
+            let isValid = true;
+
+            // Reset error messages
+            document.getElementById("firstNameError").textContent = "";
+            document.getElementById("lastNameError").textContent = "";
+            document.getElementById("genderError").textContent = "";
+            document.getElementById("birthdayError").textContent = "";
+            document.getElementById("formMessage").textContent = "";
+
+            // Validate fields
+            if (!firstName) {
+                document.getElementById("firstNameError").textContent = "First Name is required.";
+                isValid = false;
+            }
+
+            if (!lastName) {
+                document.getElementById("lastNameError").textContent = "Last Name is required.";
+                isValid = false;
+            }
+
+            if (!gender) {
+                document.getElementById("genderError").textContent = "Gender is required.";
+                isValid = false;
+            }
+
+            if (!birthday) {
+                document.getElementById("birthdayError").textContent = "Birthday is required.";
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert("User added successfully.");
+                // Here you can also add logic to store the user data if needed
+            } else {
+                document.getElementById("formMessage").textContent = "Please fill out all required fields.";
+            }
+        }
+    </script>
+</body>
+</html>
